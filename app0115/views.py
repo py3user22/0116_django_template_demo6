@@ -20,3 +20,13 @@ def git_install(request):
 @permission_classes([IsAuthenticated])
 def secret(request):
     return Response({"message": "insert secret txt @011524' @2042"})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def manager_view(request):
+    message1 = "Only managers with token login to see this"
+    message2 = "You are not authorized"
+    if request.user.groups.filter(name='Manager').exists():
+        return Response({"message": message1})
+    else:
+        return Response({"message": message2}, 403)

@@ -107,13 +107,13 @@
         <a href="from" class="from"><sup>
             from django.urls import path <br>
             from . import views <br>
-            from rest_framework.authtoken.views import obtain_aut_token <br>
+            from rest_framework.authtoken.views import obtain_auth_token <br>
         </sup></a>
         <br><br>
         | urlpatterns = [ <br>
         | .. path('menu-items/', views.menu_items), <br>
         | .. path('menu-items/< int:id>', views.single_item), <br>
-        | .. path('roles/', views.roles, <br>
+        | .. path('roles/', views.roles), <br>
         | .. path('secrets/', views.secret), <br>
         | .. path('api/secrets/', views.secret), <br>
         | .. path('api-token-auth/', obtain_auth_token) <br>
