@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
         p {border: 2px blue dashed; padding: 5px;}
-        .colo {color: red;}
+        .colo {color: red;} .sup {color: orange;} .sup:hover {color: black; background-color: tan;}
     </style>
     <title>0115 demo2 token-based authentication</title>
 </head>
@@ -15,6 +15,8 @@
     <h2>0115 token based auth. demo2</h2>
     | <a href="0115_homepage_links.html" class="link">0115 homepage with links  <> </a> <br>
     | <br>
+    | <a href="#botp" name="topg">Link to page bottom</a>
+
 
     <p>
         ~~#0115 note: use all lowercase .authtoken <br>
@@ -52,6 +54,80 @@
 
         | ] <br>
     </p>
+    <hr><br>
+    | <a href="#botp" name="topg">Link to page bottom</a>
+    <p>
+        ___#0116 <b><i>views.py </i></b> <br>------------------- create a protected API endpoint for managers <br>
+        <a href="sup" class="sup">
+        <sup>
+         |______________________________ <br>
+        | from django.shortcuts import render, get_object_or_404 <br>
+        | from rest_framework import generics, status <br>
+        | from .serializers import MenuItemSerializer <br>
+        | from .models import MenuItem <br>
+        | from rest_framework.response import Response <br>
+        | from rest_framework.decorators import api_view, permission_classes <br>
+        | from rest_framework.permissions import IsAuthenticated <br>
+        | from django.core.paginator import Paginator, EmptyPage <br>
+        </sup></a>
+        <br>| <br>| _______________________<br>
+        | @api_view() <br>
+        | @permission_classes([IsAuthenticated]) <br>
+        | @throttle_classes([TenCallsPerMinute]) <br>
+        | <a href="def">def</a> <i>throttle_check_auth</i>(request): <br>
+        | .. <a href="retu">return</a> Response({"message": "message only logged in users can see @011624 @2317"}) <br>
+        | <br>| <br>| _______________________<br>
+        | @api_view() <br>
+        | @permission_classes([IsAuthenticated]) <br>
+        | def me(request): <br>
+        | .. <a href="retu">return</a> Response(request.user.email) <br>
+        | <br>| <br>| _______________________<br>
+        | @api_view() <br>
+        | @permission_classes([IsAuthenticated]) <br>
+        | def manager_view(request): <br>
+        | .. <a href="retu">return</a> Response({"message":"only managers with token to see this"}) <br>
+        <br> <br>
+        <br>
+        ____#ex2 0116 notes: _______________________<br>
+        ____# create object for string <br>
+        | def manager_view(request): <br>
+        | .. message1 = "Only managers with token login to see this" <br>
+        | .. return Response({"message": message1}) <br>
+        <br><br>
+        | def throttle_check_auth(request): <br>
+        | .. msg1 = "Only logged in users with token 2C this" <br>
+        | .. return Response({"message": msg1}) <br>
 
+
+        <br><br>
+    </p>
+    <hr><br>
+    <p>
+        __#0116 <b><i>urls.py </i></b>-------------------edits <br><br>
+        <a href="from" class="from"><sup>
+            from django.urls import path <br>
+            from . import views <br>
+            from rest_framework.authtoken.views import obtain_aut_token <br>
+        </sup></a>
+        <br><br>
+        | urlpatterns = [ <br>
+        | .. path('menu-items/', views.menu_items), <br>
+        | .. path('menu-items/< int:id>', views.single_item), <br>
+        | .. path('roles/', views.roles, <br>
+        | .. path('secrets/', views.secret), <br>
+        | .. path('api/secrets/', views.secret), <br>
+        | .. path('api-token-auth/', obtain_auth_token) <br>
+        | .. path('throttle-check/', views.throttle_check), <br>
+        | .. path('throttle-check-auth/', views.throttle_check_auth), <br>
+        | .. path('me/', views.me), <br>
+        | .. path('manager-view/', views.manager_view), <br>
+        | ] <br>
+    </p>
+    <hr><br>
+
+
+
+    <hr><br>
+    | <a href="#topg" name="botp">Link to page top</a>
 </body>
 </html>
