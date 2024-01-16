@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        p {padding: 6px; border: 1px blue dashed;}
+        .apiv {color: red;}
+        .sup {color: orange;}
+        .meni {color: brown;}
+    </style>
+    <title>0115 django token-based authentication if DRF</title>
+</head>
+<body>
+    <h2>0115 token-based authentication demo</h2>
+    <br>
+    | <a href="0115_homepage_links.html" class="link">0115 homepage with links  <> </a> <br> <br>
+    <br>
+
+    <p>
+        ___#0115 installation<br>--<b><i>settings.py</i></b>-----------------<br>
+        | INSTALLED_APPS = [<br>
+        | .. 'rest_framework.authtoken', <br>| ] <br>
+
+        <br>
+        <br>
+        __# <b><i>Create superuser</i></b> <br>-----------------<br>
+        >> py manage.py createsuperuser <br>
+        ...... |- name <br>
+        ...... |- email <br>
+        ...... |- password <br>
+        <br>
+        <br>
+        __# 127.0.0.1:8000/admin/ <br>---------------<br>
+        Home > Auth Token > Tokens > Add token <br>
+        User: < admin > from dropdown menu <br>
+        Save button <br>
+    </p>
+    <p>
+        ___# <b><i>views.py </i></b> <br>------------------- create a protected API endpoint<br>
+        <sup class="sup">
+        from django.shortcuts import render, get_object_or_404 <br>
+        from rest_framework import generics, status <br>
+        from .serializers import MenuItemSerializer <br>
+        from .models import MenuItem <br>
+        from rest_framework.response import Response <br>
+        from rest_framework.decorators import api_view, permission_classes <br>
+        from rest_framework.permissions import IsAuthenticated <br>
+        from django.core.paginator import Paginator, EmptyPage <br>
+        </sup>
+        <br>
+        <br>
+        | <a href="apiv" class="apiv">@api_view()</a> <br>
+        | def <a href="meni" class="meni">menu_items</a>(request): <br>
+        | .. if(request.method=='GET'): <br>
+        | ...... items = <a href="meni" class="meni">MenuItem</a>.objects.select_related('category').all() <br>
+        | ...... category_name = request.query_params.get('category') <br>
+        | ...... to_price = request.query_params.get('to_price') <br>
+        | ...... search = request.query_params.get('search') <br>
+        | ...... ordering = request.query_params.get('ordering') <br>
+        | ...... perpage = request.query_params.get('perpage', default=2) <br>
+        | ...... page = request.query_params.get('page', default=1) <br>
+        | <br>
+        | ...... if category_name:
+        | .......... items = items.filter(category__title=category_name) <br>
+        | ...... if to_price: <br>
+        | .......... items = items.filter(price=to_price) <br>
+        | ...... if search: <br>
+        | .......... items = items.filter(title__contains=search) <br>
+        | <br>
+        | ...... if ordering: <br>
+        | .......... ordering_fields = ordering.split(",") <br>
+        | .......... for ordering_field in ordering_fields: <br>
+        | .............. items = items.order_by(ordering_field) <br>
+        | <br>| <br>
+        | ...... paginatory = Paginator(items,per_page=perpage) <br>
+        | ...... try: <br>
+        | .......... items = paginator.page(number=page) <br>
+        | ...... except: <br>
+        | .......... items =  [] <br>
+        | <br>
+        | ...... serialized_item = <br>
+        | ...... return Response(serialized_item.data) <br>
+        | <br>
+        | .. elif request.method=='POST': <br>
+        | ...... serialized_item = <a href="meni" class="meni">MenuItemSerializer</a>(data=request.data) <br>
+        | ...... serialized_item.is_valid(raise_exception=True) <br>
+        | ...... serialized_item.save <br>
+        | ...... return Response(serialized_item.validated_data, status.HTTP_201_CREATED) <br>
+
+
+
+
+
+
+
+        <br> <br>
+        <a href="apiv" class="apiv">@api_view()</a> <br>
+        def secret(request): <br>
+        .. return Response({"message":"some secret message0115"}) <br>
+        <br>
+        <br>
+        __# go to page <b><i>127.0.0.1:8000/api/secret</i></b> <br>---------------------shows the message, needs edit for encryption <br>
+          <br>
+         <br>
+        __#0115 add the decorator to add permission needed access <br>---------------------<br>
+        <a href="apiv" class="apiv">@api_view()</a> <br>
+        <a href="apiv" class="apiv">@permission_classes([IsAuthenticated])</a> <br>
+        def secret(request): <br>
+        .. return Response({"message":"some secret message0115"}) <br>
+        <br>
+        <br>
+        __# go to app Insomnia > <b><i>127.0.0.1:8000/api/secret</i></b> <br>---------------------
+        shows the message, "detail": "Authentication credentials not provided" <br>
+          <br>
+         <br>
+        __# go to django admin site > Home > Auth Token > Tokens <br>
+        Copy the token created earlier or create new token <br>
+        <br> <br>
+        __# go to app Insomnia > click on Auth tab >   <br>
+        click ' Bearer Token ' on dropdown <br>
+        Token field = paste the token copied from admin tokens <br>
+        prefix field = Token <br>
+        <br>
+        <br>
+
+    </p>
+    <p>
+        __# <b><i>settings.py </i></b> <br>--------------------add new section to rest_framework section <br>
+        | <a href="ress">REST_FRAMEWORK</a> = { <br>
+        | .. 'DEFAULT_AUTHENTICATION_CLASSES': ( <br>
+        | ...... 'rest_framework.authentication.TokenAuthentication', <br>
+        | .. ) <br>
+        | } <br>
+
+    </p>
+
+</body>
+</html>

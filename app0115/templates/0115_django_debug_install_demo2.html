@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1229 debug toolbar notes demo2</title>
+</head>
+<body>
+    <h2><i>0115 install debug toolbar notes demo2</i></h2>
+    <a href="#botpg" id="toppg">link to bottom</a> <br>
+    <br>
+    | <a href="0115_homepage_links.html" class="link">0115 homepage with links  <> </a> <br> <br>
+    <br>
+    <hr><br>
+    <p>
+        install of package <br>----------------<br>
+        pipenv install django-debug-toolbar <br>
+        <br>
+        python packages search > django-debug-toolbar <br>
+        <br>
+    </p>
+
+
+    <p>
+        # urls.py <br>----------<br>
+        from django.contrib import admin <br>
+        from django.urls import path, include <br>
+        from django.conf import settings <br> <br>
+
+        if settings.DEBUG: <br>
+        .. import debug_toolbar <br>
+        .. urlpatterns = [ <br>
+        ...... path('admin/', admin.site.urls), <br>
+        ...... path('', include('app_1228.urls')), <br>
+        ...... path('__debug__/', include(debug_toolbar.urls)), <br>.. ] <br>
+    <br>
+        # settings.py <br>-----------<br>
+        MIDDLEWARE = [ 'debug_toolbar.middleware.DebugToolbarMiddleware', ] <br><br>
+        # add new section: <br>
+        DEBUG_TOOLBAR_CONFIG = { <br>
+        .. 'SHOW_COLLAPSED': True, <br>
+        .. 'SHOW_TOOLBAR_CALLBACK': lambda request: True, <br>
+        .. 'SQL_WARNING_THRESHOLD': 0.1, <br>
+        .. 'RESULTS_CACHE_SIZE': 10, <br>
+        } <br> <br>
+        # add call to app <br>
+        INSTALLED_APPS = ['debug_toolbar',] <br>
+        <br>
+
+
+
+    </p>
+    <a href="#toppg" id="botpg">link to top</a>
+</body>
+</html>
