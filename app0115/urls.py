@@ -15,4 +15,8 @@ urlpatterns = [
 
     path('django_debug', views.debug_install),
     path('0115_django_debug_install_demo2.html', views.debug_install),
+
+    # secret api demo0115
+    path('secret/', views.secret),
+    path('api/secret/', views.secret),
 ]

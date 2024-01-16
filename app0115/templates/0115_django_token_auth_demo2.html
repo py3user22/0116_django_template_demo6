@@ -5,6 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        p {border: 2px blue dashed; padding: 5px;}
+        .colo {color: red;}
+    </style>
     <title>0115 demo2 token-based authentication</title>
 </head>
 <body>
@@ -13,10 +17,41 @@
     | <br>
 
     <p>
-
-
+        ~~#0115 note: use all lowercase .authtoken <br>
+        ___#---<b><i>settings.py</i></b>-----------------edits <br> <br>
+        | INSTALLED_APPS = [<br>
+        | .. <a href="colo" class="colo">'rest_framework.authtoken'</a>, <br>| ] <br>
+        <br>  <br>
+        | REST_FRAMEWORK = { <br>
+        | .. 'DEFAULT_RENDERER_CLASSES': [ <br>
+        | ...... 'rest_framework.renderers.JSONRenderer', <br>
+        | ...... 'rest_framework.renderers.BrowsableAPIRenderer', <br>
+        | ...... #'rest_framework_xml.renderers.XMLRenderer', <br>
+        | .. ], <br>
+        | .. 'DEFAULT_AUTHENTICATION_CLASSES': ( <br>
+        | ...... <a href="colo" class="colo">'rest_framework.authentication.TokenAuthentication'</a>, <br>
+        | .. ) <br>
+        | } <br>
+        <br><br>
 
 
     </p>
+    <hr><br>
+    <p>
+        __# <b><i>urls.py </i></b>-------------------edits <br><br>
+        <a href="from" class="from"><sup>
+            from django.urls import path <br>
+            from . import views <br>
+            from rest_framework.authtoken.views import obtain_aut_token <br>
+        </sup></a>
+        <br><br>
+        | urlpatterns = [ <br>
+        | .. path('secrets/', views.secret), <br>
+        | .. path('api/secrets/', views.secret), <br>
+        | .. path('api-token-auth/', obtain_auth_token) <br>
+
+        | ] <br>
+    </p>
+
 </body>
 </html>
